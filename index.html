@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Kufi Arabic';
+    }
+    .onboarding-container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(30, 60, 114, 0.18);
+      padding: 48px 36px 36px 36px;
+      max-width: 350px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .onboarding-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e3c72;
+      margin-bottom: 12px;
+    }
+    .onboarding-desc {
+      color: #4a5a6a;
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+    .pin-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .pin-inputs input {
+      width: 48px;
+      height: 56px;
+      font-size: 2rem;
+      text-align: center;
+      border: 2px solid #e0e6ed;
+      border-radius: 10px;
+      outline: none;
+      transition: border 0.2s;
+      background: #f7faff;
+      color: #1e3c72;
+      font-family: inherit;
+    }
+    .pin-inputs input:focus {
+      border: 2px solid #2a5298;
+      background: #eaf1fb;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px 0;
+      background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(30, 60, 114, 0.08);
+    }
+    .submit-btn:active {
+      background: #1e3c72;
+    }
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.98rem;
+      margin-bottom: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="onboarding-container">
+    <div class="onboarding-title">به‌خێربێن</div>
+    <div class="onboarding-desc">تكایه‌ وشه‌ی نهێنی  بنووسه‌</div>
+    <form id="pinForm" autocomplete="off">
+      <div class="error-message" id="errorMsg">وشه‌ی نهێنی هه‌له‌یه‌</div>
+      <div class="pin-inputs">
+        <input type="password" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+        <input type="password" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+        <input type="password" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+        <input type="password" maxlength="1" inputmode="numeric" pattern="[0-9]*" required />
+      </div>
+      <button class="submit-btn" type="submit">چونه‌ژۆر</button>
+    </form>
+  </div>
+  <script>
+    // Focus next input on input
+    const inputs = document.querySelectorAll('.pin-inputs input');
+    inputs.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        if (e.inputType === 'deleteContentBackward' && input.value === '' && idx > 0) {
+          inputs[idx - 1].focus();
+        } else if (input.value && idx < inputs.length - 1) {
+          inputs[idx + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && idx > 0) {
+          inputs[idx - 1].focus();
+        }
+      });
+    });
+
+    // PIN validation (example: 1234)
+    const pinForm = document.getElementById('pinForm');
+    const errorMsg = document.getElementById('errorMsg');
+    pinForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const pin = Array.from(inputs).map(input => input.value).join('');
+      if (pin === '2200') {
+        window.location.href = 'home.html';
+      } else {
+        errorMsg.style.display = 'block';
+        inputs.forEach(input => input.value = '');
+        inputs[0].focus();
+      }
+    });
+    // Hide error on input
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        errorMsg.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>

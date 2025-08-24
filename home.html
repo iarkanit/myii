@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستەمی کۆگا و فروشتن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Kufi Arabic';
+        }
+        
+        body {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 5px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f0f0f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 3px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group > * {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-control {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.2);
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #e53935);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9ff;
+            transform: scale(1.01);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .delete-btn:hover {
+            background: #e53935;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 98vw;
+                padding: 10px;
+            }
+            .main-content {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+            }
+            .form-group > * {
+                min-width: 100%;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .card {
+                padding: 10px;
+            }
+            .stat-card {
+                padding: 10px;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.95em;
+            }
+            .btn, .btn-primary, .btn-success, .btn-danger {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 8px;
+                padding: 2px;
+            }
+            .header {
+                padding: 10px;
+            }
+            .header h1 {
+                font-size: 1.1em;
+            }
+            .main-content {
+                padding: 2px;
+            }
+            .tabs button {
+                font-size: 13px;
+                padding: 8px 5px;
+            }
+        }
+
+        .sale-product-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .sale-product-row .form-control {
+            margin: 0;
+        }
+
+        .sale-product-row button {
+            width: auto;
+        }
+
+        .sale-type {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .sale-type.cash {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .sale-type.installment {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+            padding-top: 60px;
+            animation: fadeInModal 0.5s;
+        }
+
+        @keyframes fadeInModal {
+            from { background-color: rgba(0,0,0,0); }
+            to { background-color: rgba(0,0,0,0.6); }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-button {
+            color: #aaa;
+            float: left; /* For RTL */
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 سیستەمی کۆگا و فروشتن</h1>
+            <p>بەڕێوەبردنی بەرهەمەکان و فروشتن بە شێوەیەکی پیشەیی</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('inventory')">کۆگا</button>
+                <button class="tab" onclick="showTab('sales')">فروشتن</button>
+                <button class="tab" onclick="showTab('reports')">ڕاپۆرتەکان</button>
+            </div>
+            
+            <!-- کۆگا Tab -->
+            <div id="inventory" class="tab-content active">
+                <div class="card">
+                    <h3>🔋 زیادکردنی بەرهەمی نوێ</h3>
+                    <div class="form-group">
+                        <input type="text" id="productName" placeholder="ناوی بەرهەم" class="form-control">
+                        <input type="number" id="productPrice" placeholder="نرخ" class="form-control">
+                        <input type="number" id="productQuantity" placeholder="ژمارەی دانە" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="purchaseDate" class="form-control" title="بەرواری کڕین">
+                    </div>
+                    <button onclick="addProduct()" class="btn btn-primary">زیادکردنی بەرهەم</button>
+                </div>
+                
+                <div class="card">
+                    <h3>📦 لیستی بەرهەمەکان</h3>
+                    <div class="table-container">
+                        <table id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>ناوی بەرهەم</th>
+                                    <th>نرخ (IQD)</th>
+                                    <th>ژمارە</th>
+                                    <th>بەرواری کڕین</th>
+                                    <th>کردارەکان</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- فروشتن Tab -->
+            <div id="sales" class="tab-content">
+                <div class="card">
+                    <h3>💰 فروشتنی بەرهەم</h3>
+                    <form id="saleForm">
+                        <div id="saleProductsContainer">
+                            <div class="form-group sale-product-row">
+                                <select class="form-control saleProductSelect">
+                                    <option value="">بەرهەم دیاری بکە</option>
+                                </select>
+                                <input type="number" class="form-control saleQuantity" placeholder="ژمارەی فرۆشراو" min="1">
+                                <button type="button" class="btn btn-danger" onclick="removeSaleProductRow(this)">لابردن</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addSaleProductRow()">
+                            زیادکردنی بەرهەمی تر +
+                        </button>
+                        <div class="form-group">
+                            <select id="saleType" class="form-control">
+                                <option value="cash">فرۆشتنی ڕاستەوخۆ</option>
+                                <option value="installment">فرۆشتنی قیست</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" id="saleDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="customerName" placeholder="ناوی کڕیار" class="form-control">
+                            <input type="text" id="customerLocation" placeholder="شوێنی کڕیار" class="form-control">
+                            <input type="tel" id="customerPhone" placeholder="ژمارەی موبایل" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="number" id="totalPriceInput" placeholder="کۆی نرخ" class="form-control">
+                        </div>
+                        
+                        <div id="installmentFields" style="display:none;">
+                            <div class="form-group">
+                                <input type="text" id="customerGuarantor" placeholder="ناوی کەفیل" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="dayAmpere" placeholder="ئەمپێر رۆژ" class="form-control">
+                                <input type="number" id="nightAmpere" placeholder="ئەمپێر شەو" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="downPayment" placeholder="بڕی پارەی دراو" class="form-control">
+                                <input type="number" id="remainingAmount" placeholder="بڕی پارەی ماوە" class="form-control" readonly>
+                            </div>
+                        </div>
+                        
+                        <button type="button" onclick="makeSale()" class="btn btn-success">تۆمارکردنی فرۆشتن</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>🛒 لیستی فروشتنەکان</h3>
+                    <div class="form-group">
+                        <input type="text" id="salesSearchInput" class="form-control" placeholder="گەڕان بەپێی ناوی کڕیار یان ژمارەی موبایل...">
+                    </div>
+                    <div class="table-container">
+                        <table id="salesTable">
+                            <thead>
+                                <tr>
+                                    <th>بەروار</th>
+                                    <th>ناوی کڕیار</th>
+                                    <th>جۆری فرۆشتن</th>
+                                    <th>کۆی نرخ</th>
+                                    <th>کۆی پارەی دراو</th>
+                                    <th>پارەی ماوە</th>
+                                    <th>کردارەکان</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ڕاپۆرتەکان Tab -->
+            <div id="reports" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">کۆی داهاتی مانگانە</div>
+                        <div class="stat-value" id="monthlyRevenue">0</div>
+                        <div>دینار عێراقی</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">کۆی داهاتی سالانە</div>
+                        <div class="stat-value" id="yearlyRevenue">0</div>
+                        <div>دینار عێراقی</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">کۆی بەرهەمەکان</div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div>دانە</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📊 ڕاپۆرتی تەفصیلی</h3>
+                    <div class="form-group">
+                        <select id="reportType" class="form-control">
+                            <option value="monthly">ڕاپۆرتی مانگانە</option>
+                            <option value="yearly">ڕاپۆرتی سالانە</option>
+                            <option value="installment">ڕاپۆرتی فرۆشتنی قیست</option>
+                        </select>
+                        <input type="month" id="reportMonth" class="form-control">
+                        <button onclick="generateReport()" class="btn btn-primary">دروستکردنی ڕاپۆرت</button>
+                    </div>
+                    <div id="reportResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding installment payment -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closePaymentModal()">&times;</span>
+            <h3>زیادکردنی پارەی قیست</h3>
+            <p>کڕیار: <span id="modalCustomerName"></span></p>
+            <div class="form-group">
+                <input type="number" id="modalPaymentAmount" placeholder="بڕی پارەی زیادکراو" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="date" id="modalPaymentDate" class="form-control">
+            </div>
+            <button id="modalSubmitButton" class="btn btn-success">زیادکردن</button>
+        </div>
+    </div>
+
+    <!-- Modal for viewing payment history -->
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeHistoryModal()">&times;</span>
+            <h3>مێژووی پارەدان</h3>
+            <p>کڕیار: <span id="historyCustomerName"></span></p>
+            <div class="table-container" style="margin-top: 20px;">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>بەروار</th>
+                            <th>بڕی پارە (IQD)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // گۆڕاوەکان
+        let products = [];
+        let sales = [];
+        let nextProductId = 1;
+        let nextSaleId = 1;
+
+        // =================================================
+        // Local Storage Functions for Data Persistence
+        // =================================================
+        function saveData() {
+            try {
+                localStorage.setItem('inventoryAppProducts', JSON.stringify(products));
+                localStorage.setItem('inventoryAppSales', JSON.stringify(sales));
+                localStorage.setItem('inventoryAppNextProductId', nextProductId.toString());
+                localStorage.setItem('inventoryAppNextSaleId', nextSaleId.toString());
+            } catch (e) {
+                console.error("Error saving data to localStorage", e);
+                alert("نەتوانرا داتا پاشەکەوت بکرێت. ڕەنگە بیرگەی وێبگەڕەکەت پڕ بوبێت.");
+            }
+        }
+
+        function loadData() {
+            const storedProducts = localStorage.getItem('inventoryAppProducts');
+            const storedSales = localStorage.getItem('inventoryAppSales');
+            const storedNextProductId = localStorage.getItem('inventoryAppNextProductId');
+            const storedNextSaleId = localStorage.getItem('inventoryAppNextSaleId');
+
+            if (storedProducts) products = JSON.parse(storedProducts);
+            if (storedSales) sales = JSON.parse(storedSales);
+            if (storedNextProductId) nextProductId = parseInt(storedNextProductId, 10);
+            if (storedNextSaleId) nextSaleId = parseInt(storedNextSaleId, 10);
+        }
+
+        // فەنکشنی پیشاندانی تابەکان
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'reports') {
+                updateStatistics();
+            }
+        }
+
+        // زیادکردنی بەرهەم
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const purchaseDate = document.getElementById('purchaseDate').value;
+
+            if (!name || !price || !quantity || !purchaseDate) {
+                alert('تکایە هەموو زانیارییەکان پڕ بکەرەوە!');
+                return;
+            }
+
+            const product = {
+                id: nextProductId++,
+                name: name,
+                price: price,
+                quantity: quantity,
+                purchaseDate: purchaseDate
+            };
+
+            products.push(product);
+            updateInventoryTable();
+            updateSaleProductSelect();
+            clearProductForm();
+            saveData();
+            alert('بەرهەم بە سەرکەوتووی زیاد کرا!');
+        }
+
+        // نوێکردنەوەی خشتەی کۆگا
+        function updateInventoryTable() {
+            const tbody = document.querySelector('#inventoryTable tbody');
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.price.toLocaleString()} IQD</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.purchaseDate}</td>
+                    <td><button class="delete-btn" onclick="deleteProduct(${product.id})">سڕینەوە</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // سڕینەوەی بەرهەم
+        function deleteProduct(id) {
+            if (confirm('دڵنیایی لە سڕینەوەی ئەم بەرهەمە؟')) {
+                products = products.filter(p => p.id !== id);
+                updateInventoryTable();
+                updateSaleProductSelect();
+                saveData();
+            }
+        }
+
+        // نوێکردنەوەی لیستی بەرهەمەکان بۆ فرۆشتن
+        function updateSaleProductSelect() {
+            const selects = document.querySelectorAll('.saleProductSelect');
+            selects.forEach(select => {
+                select.innerHTML = '<option value="">بەرهەم دیاری بکە</option>';
+                products.forEach(product => {
+                    if (product.quantity > 0) {
+                        const option = document.createElement('option');
+                        option.value = product.id;
+                        option.textContent = `${product.name} (${product.quantity} دانە)`;
+                        select.appendChild(option);
+                    }
+                });
+            });
+        }
+
+        // زیادکردنی دوگمەی زیادکردنی بەرهەم لە فۆڕمی فرۆشتن
+function addSaleProductRow() {
+    const container = document.getElementById('saleProductsContainer');
+    const row = document.createElement('div');
+    row.className = 'form-group sale-product-row';
+    row.innerHTML = `
+        <select class="form-control saleProductSelect">
+            <option value="">بەرهەم دیاری بکە</option>
+            ${products.map(p => `
+                <option value="${p.id}">${p.name} (${p.quantity} دانە)</option>
+            `).join('')}
+        </select>
+        <input type="number" class="form-control saleQuantity" placeholder="ژمارەی فرۆشراو" min="1">
+        <button type="button" class="btn btn-danger" onclick="removeSaleProductRow(this)">لابردن</button>
+    `;
+    container.appendChild(row);
+    updateSaleProductSelect();
+}
+
+// لابردنی ڕیزی بەرهەم
+function removeSaleProductRow(button) {
+    button.closest('.sale-product-row').remove();
+}
+
+// فرۆشتن
+function makeSale() {
+    const saleType = document.getElementById('saleType').value;
+    const date = document.getElementById('saleDate').value;
+    const customerName = document.getElementById('customerName').value;
+    const customerLocation = document.getElementById('customerLocation').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+
+    // پشکنینی زانیارییە سەرەکییەکان
+    if (!date || !customerName || !customerLocation || !customerPhone) {
+        alert('تکایە زانیارییەکانی کڕیار تەواو بکە!');
+        return;
+    }
+
+    // کۆکردنەوەی زانیاری بەرهەمەکان
+    const productRows = document.querySelectorAll('.sale-product-row');
+    const selectedProducts = [];
+
+    for (const row of productRows) {
+        const productId = parseInt(row.querySelector('.saleProductSelect').value);
+        const quantity = parseInt(row.querySelector('.saleQuantity').value);
+
+        if (!productId || !quantity) {
+            alert('تکایە بەرهەم و ژمارە دیاری بکە!');
+            return;
+        }
+
+        const product = products.find(p => p.id === productId);
+        if (!product) continue;
+        
+        if (quantity > product.quantity) {
+            alert(`ژمارەی داواکراو بۆ ${product.name} زیاترە لە ژمارەی بەردەست!`);
+            return;
+        }
+
+        selectedProducts.push({
+            productId,
+            productName: product.name,
+            quantity,
+            unitPrice: product.price,
+            totalPrice: quantity * product.price
+        });
+    }
+
+    if (selectedProducts.length === 0) {
+        alert('تکایە لانی کەم یەک بەرهەم دیاری بکە!');
+        return;
+    }
+
+    // وەرگرتنی نرخی کۆی گشتی بە شێوەی دەستی
+    const manualTotalPrice = parseFloat(document.getElementById('totalPriceInput').value);
+    if (isNaN(manualTotalPrice) || manualTotalPrice < 0) {
+        alert('تکایە کۆی نرخی فرۆشتن بە دروستی پڕ بکەرەوە!');
+        return;
+    }
+    const totalSalePrice = manualTotalPrice;
+
+    // زانیاری قیست
+    let installmentData = {};
+    if (saleType === 'installment') {
+        const customerGuarantor = document.getElementById('customerGuarantor').value;
+        const dayAmpere = document.getElementById('dayAmpere').value;
+        const nightAmpere = document.getElementById('nightAmpere').value;
+        const downPayment = parseFloat(document.getElementById('downPayment').value) || 0;
+
+        // پشکنینی زانیارییە پێویستەکانی قیست
+        if (!customerGuarantor || isNaN(downPayment)) {
+            alert('تکایە زانیارییەکانی قیست تەواو بکە!');
+            return;
+        }
+
+        const remainingAmount = totalSalePrice - downPayment;
+        installmentData = {
+            customerGuarantor,
+            dayAmpere,
+            nightAmpere,
+            downPayment,
+            remainingAmount: remainingAmount,
+            paymentHistory: [{ amount: downPayment, date: date }]
+        };
+    }
+
+    // تۆمارکردنی فرۆشتن
+    const sale = {
+        id: nextSaleId++,
+        date,
+        customerName,
+        customerLocation,
+        customerPhone,
+        saleType,
+        products: selectedProducts,
+        totalPrice: totalSalePrice,
+        ...installmentData
+    };
+
+    // کەمکردنەوەی ژمارەی بەرهەمەکان
+    selectedProducts.forEach(sp => {
+        const product = products.find(p => p.id === sp.productId);
+        if (product) {
+            product.quantity -= sp.quantity;
+        }
+    });
+
+    // زیادکردن بۆ لیستی فرۆشتنەکان
+    sales.push(sale);
+    
+    // نوێکردنەوەی خشتەکان
+    updateInventoryTable();
+    updateSaleProductSelect();
+    updateSalesTable();
+    
+    // پاککردنەوەی فۆڕم
+    clearSaleForm();
+    
+    saveData();
+    alert('فرۆشتن بە سەرکەوتووی تۆمار کرا!');
+}
+        // نوێکردنەوەی خشتەی فرۆشتنەکان
+        function updateSalesTable(salesToDisplay = sales) {
+            const salesTbody = document.querySelector('#salesTable tbody');
+            salesTbody.innerHTML = '';
+
+            if (salesToDisplay.length === 0) {
+                const row = salesTbody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 7;
+                // Check if the main sales array is empty or if it's a failed search
+                if (sales.length === 0) {
+                    cell.textContent = 'هیچ فرۆشتنێک تۆمار نەکراوە';
+                } else {
+                    cell.textContent = 'هیچ فرۆشتنێک بەم گەڕانە نەدۆزرایەوە';
+                }
+                cell.style.textAlign = 'center';
+                cell.style.padding = '20px';
+                return;
+            }
+
+            salesToDisplay.forEach(sale => {
+                const row = salesTbody.insertRow();
+                
+                row.insertCell().textContent = sale.date;
+                row.insertCell().textContent = sale.customerName;
+                
+                const saleTypeCell = row.insertCell();
+                saleTypeCell.innerHTML = `<span class="sale-type ${sale.saleType}">${sale.saleType === 'installment' ? '🔄 قیست' : '💵 نەقد'}</span>`;
+
+                row.insertCell().textContent = `${sale.totalPrice.toLocaleString()} IQD`;
+
+                if (sale.saleType === 'installment') {
+                    row.insertCell().textContent = `${(sale.downPayment || 0).toLocaleString()} IQD`;
+                    row.insertCell().textContent = `${(sale.remainingAmount || 0).toLocaleString()} IQD`;
+                } else {
+                    row.insertCell().textContent = '-';
+                    row.insertCell().textContent = '-';
+                }
+
+                const actionsCell = row.insertCell();
+                actionsCell.style.whiteSpace = 'nowrap';
+                let buttonsHTML = `<button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="editSale(${sale.id})">دەستکاری</button>`;
+                
+                if (sale.saleType === 'installment') {
+                    buttonsHTML += ` <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="openPaymentModal(${sale.id})">زیاد کردن</button>`;
+                }
+                
+                buttonsHTML += ` <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteSale(${sale.id})">سڕینەوە</button>`;
+                
+                actionsCell.innerHTML = buttonsHTML;
+            });
+        }
+
+        // سڕینەوەی فرۆشتن
+        function deleteSale(id) {
+            if (confirm('دڵنیایی لە سڕینەوەی ئەم فرۆشتنە؟ هەموو بەرهەمەکان دەگەڕێنەوە کۆگا.')) {
+                const saleIndex = sales.findIndex(s => s.id === id);
+                if (saleIndex > -1) {
+                    const saleToDelete = sales[saleIndex];
+                    
+                    // گەڕاندنەوەی بەرهەمە فرۆشراوەکان بۆ کۆگا
+                    saleToDelete.products.forEach(soldProduct => {
+                        const productInInventory = products.find(p => p.id === soldProduct.productId);
+                        if (productInInventory) {
+                            productInInventory.quantity += soldProduct.quantity;
+                        }
+                    });
+
+                    // سڕینەوەی فرۆشتنەکە
+                    sales.splice(saleIndex, 1);
+                    
+                    updateInventoryTable();
+                    updateSaleProductSelect();
+                    updateSalesTable();
+                    saveData();
+                    alert('فرۆشتن بە سەرکەوتوویی سڕایەوە.');
+                }
+            }
+        }
+
+        // کارەکانی مۆدالی پارەدان
+        function openPaymentModal(saleId) {
+            const sale = sales.find(s => s.id === saleId);
+            if (!sale) return;
+
+            const modal = document.getElementById('paymentModal');
+            document.getElementById('modalCustomerName').textContent = sale.customerName;
+            document.getElementById('modalPaymentAmount').value = '';
+            document.getElementById('modalPaymentDate').valueAsDate = new Date();
+            
+            const submitButton = document.getElementById('modalSubmitButton');
+            submitButton.onclick = () => submitPayment(saleId);
+
+            modal.style.display = "block";
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.style.display = "none";
+        }
+
+        function submitPayment(saleId) {
+            const sale = sales.find(s => s.id === saleId);
+            if (!sale) return;
+
+            const paymentAmount = parseFloat(document.getElementById('modalPaymentAmount').value);
+            const paymentDate = document.getElementById('modalPaymentDate').value;
+
+            if (isNaN(paymentAmount) || paymentAmount <= 0) {
+                alert("تکایە بڕێکی دروست بنووسە!");
+                return;
+            }
+
+            if (!paymentDate) {
+                alert("تکایە بەروار دیاری بکە!");
+                return;
+            }
+
+            if (paymentAmount > sale.remainingAmount) {
+                alert(`بڕی پارە زیاترە لە پارەی ماوە! (${sale.remainingAmount.toLocaleString()} IQD)`);
+                return;
+            }
+
+            if (!sale.paymentHistory) {
+                sale.paymentHistory = [{ amount: sale.downPayment, date: sale.date }];
+            }
+            
+            sale.paymentHistory.push({ amount: paymentAmount, date: paymentDate });
+
+            sale.downPayment += paymentAmount;
+            sale.remainingAmount -= paymentAmount;
+
+            updateSalesTable();
+            closePaymentModal();
+            saveData();
+            alert("پارە و بەروار بە سەرکەوتوویی زیادکرا!");
+        }
+
+        // نوێکردنەوەی ئامارەکان
+        function updateStatistics() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            // داهاتی مانگانە
+            const monthlyRevenue = sales
+                .filter(sale => {
+                    const saleDate = new Date(sale.date);
+                    return saleDate.getMonth() === currentMonth && saleDate.getFullYear() === currentYear;
+                })
+                .reduce((total, sale) => total + sale.totalPrice, 0);
+
+            // داهاتی سالانە
+            const yearlyRevenue = sales
+                .filter(sale => {
+                    const saleDate = new Date(sale.date);
+                    return saleDate.getFullYear() === currentYear;
+                })
+                .reduce((total, sale) => total + sale.totalPrice, 0);
+
+            // کۆی بەرهەمەکان
+            const totalProducts = products.reduce((total, product) => total + product.quantity, 0);
+
+            document.getElementById('monthlyRevenue').textContent = monthlyRevenue.toLocaleString();
+            document.getElementById('yearlyRevenue').textContent = yearlyRevenue.toLocaleString();
+            document.getElementById('totalProducts').textContent = totalProducts;
+        }
+
+        // دروستکردنی ڕاپۆرت
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const reportMonth = document.getElementById('reportMonth').value;
+            const resultDiv = document.getElementById('reportResult');
+
+            let reportHtml = '<div class="card"><h3>ڕاپۆرتی تەفصیلی</h3>';
+
+            if (reportType === 'monthly' && reportMonth) {
+                const [year, month] = reportMonth.split('-');
+                const monthlyData = sales.filter(sale => {
+                    const saleDate = new Date(sale.date);
+                    return saleDate.getFullYear() == year && saleDate.getMonth() == (month - 1);
+                });
+
+                const totalRevenue = monthlyData.reduce((total, sale) => total + sale.totalPrice, 0);
+                const totalQuantity = monthlyData.reduce((total, sale) => {
+                    const saleQuantity = sale.products.reduce((subTotal, p) => subTotal + p.quantity, 0);
+                    return total + saleQuantity;
+                }, 0);
+
+                reportHtml += `
+                    <p><strong>ڕاپۆرتی مانگی ${month}/${year}</strong></p>
+                    <p>کۆی داهات: ${totalRevenue.toLocaleString()} IQD</p>
+                    <p>کۆی فرۆشراو: ${totalQuantity} دانە</p>
+                    <p>ژمارەی فرۆشتن: ${monthlyData.length} جار</p>
+                `;
+
+                if (monthlyData.length > 0) {
+                    reportHtml += '<div class="table-container"><table><thead><tr><th>بەروار</th><th>بەرهەمەکان</th><th>کڕیار</th><th>شوێن</th><th>موبایل</th><th>کۆی گشتی</th></tr></thead><tbody>';
+                    monthlyData.forEach(sale => {
+                        const productsList = sale.products.map(p => `${p.productName} (${p.quantity} دانە)`).join('<br>');
+                        reportHtml += `<tr>
+                            <td>${sale.date}</td>
+                            <td>${productsList}</td>
+                            <td>${sale.customerName}</td>
+                            <td>${sale.customerLocation}</td>
+                            <td>${sale.customerPhone}</td>
+                            <td>${sale.totalPrice.toLocaleString()} IQD</td>
+                        </tr>`;
+                    });
+                    reportHtml += '</tbody></table></div>';
+                }
+
+            } else if (reportType === 'yearly') {
+                const currentYear = new Date().getFullYear();
+                const yearlyData = sales.filter(sale => {
+                    const saleDate = new Date(sale.date);
+                    return saleDate.getFullYear() === currentYear;
+                });
+
+                const totalRevenue = yearlyData.reduce((total, sale) => total + sale.totalPrice, 0);
+                const totalQuantity = yearlyData.reduce((total, sale) => {
+                    const saleQuantity = sale.products.reduce((subTotal, p) => subTotal + p.quantity, 0);
+                    return total + saleQuantity;
+                }, 0);
+
+                reportHtml += `
+                    <p><strong>ڕاپۆرتی ساڵی ${currentYear}</strong></p>
+                    <p>کۆی داهات: ${totalRevenue.toLocaleString()} IQD</p>
+                    <p>کۆی فرۆشراو: ${totalQuantity} دانە</p>
+                    <p>ژمارەی فرۆشتن: ${yearlyData.length} جار</p>
+                `;
+
+            } else if (reportType === 'installment') {
+                reportHtml += '<p><strong>ڕاپۆرتی فرۆشتنی قیست:</strong></p>';
+                const installmentSales = sales.filter(s => s.saleType === 'installment');
+
+                if (installmentSales.length > 0) {
+                    const totalSold = installmentSales.reduce((total, sale) => total + sale.totalPrice, 0);
+                    const totalPaid = installmentSales.reduce((total, sale) => total + (sale.downPayment || 0), 0);
+                    const totalRemaining = installmentSales.reduce((total, sale) => total + (sale.remainingAmount || 0), 0);
+
+                    reportHtml += `
+                        <div style="margin: 15px 0; padding: 15px; background: #f0f8ff; border-radius: 8px;">
+                            <h4>کورتەی گشتی قیستەکان:</h4>
+                            <p>• کۆی فرۆشتنی قیست: ${totalSold.toLocaleString()} IQD</p>
+                            <p>• کۆی پارەی وەرگیراو: ${totalPaid.toLocaleString()} IQD</p>
+                            <p>• کۆی پارەی ماوە: ${totalRemaining.toLocaleString()} IQD</p>
+                            <p>• ژمارەی فرۆشتنەکان: ${installmentSales.length} فرۆشتن</p>
+                        </div>
+                    `;
+
+                    reportHtml += '<div class="table-container"><table><thead><tr><th>ناوی کڕیار</th><th>کۆی نرخ</th><th>کۆی پارەی دراو</th><th>پارەی ماوە</th><th>کردارەکان</th></tr></thead><tbody>';
+                    
+                    installmentSales.forEach(sale => {
+                        reportHtml += `<tr>
+                            <td>${sale.customerName}</td>
+                            <td>${sale.totalPrice.toLocaleString()} IQD</td>
+                            <td>${(sale.downPayment || 0).toLocaleString()} IQD</td>
+                            <td><strong>${(sale.remainingAmount || 0).toLocaleString()} IQD</strong></td>
+                            <td><button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="showPaymentHistory(${sale.id})">بینینی مێژوو</button></td>
+                        </tr>`;
+                    });
+                    reportHtml += '</tbody></table></div>';
+                } else {
+                    reportHtml += '<p>هیچ فرۆشتنێکی قیست تۆمار نەکراوە!</p>';
+                }
+
+            }
+
+            reportHtml += '</div>';
+            resultDiv.innerHTML = reportHtml;
+        }
+
+        function showPaymentHistory(saleId) {
+            const sale = sales.find(s => s.id === saleId);
+            if (!sale || !sale.paymentHistory || sale.paymentHistory.length === 0) {
+                alert("هیچ مێژوویەکی پارەدان بۆ ئەم فرۆشتنە تۆمار نەکراوە.");
+                return;
+            }
+
+            const modal = document.getElementById('historyModal');
+            document.getElementById('historyCustomerName').textContent = sale.customerName;
+            const historyTbody = document.querySelector('#historyTable tbody');
+            historyTbody.innerHTML = ''; // پاککردنەوەی داتای پێشوو
+
+            sale.paymentHistory.forEach(payment => {
+                const row = historyTbody.insertRow();
+                row.insertCell().textContent = payment.date;
+                row.insertCell().textContent = `${payment.amount.toLocaleString()} IQD`;
+            });
+
+            modal.style.display = "block";
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').style.display = "none";
+        }
+        // پاککردنەوەی فۆڕمەکان
+        function clearProductForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productQuantity').value = '';
+            document.getElementById('purchaseDate').value = '';
+        }
+
+        function clearSaleForm() {
+            // پاککردنەوەی هەموو فۆڕمەکە
+            document.getElementById('saleProductsContainer').innerHTML = ''; // پاککردنەوەی هەموو بەرهەمەکان
+            addSaleProductRow(); // زیادکردنی ڕیزێکی نوێ
+
+            // پاککردنەوەی زانیارییەکانی تر
+            document.getElementById('saleDate').valueAsDate = new Date();
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerLocation').value = '';
+            document.getElementById('customerPhone').value = '';
+            
+            // پاککردنەوەی خانەکانی قیست
+            document.getElementById('customerGuarantor').value = '';
+            document.getElementById('dayAmpere').value = '';
+            document.getElementById('nightAmpere').value = '';
+            document.getElementById('totalPriceInput').value = '';
+            document.getElementById('downPayment').value = '';
+            document.getElementById('remainingAmount').value = '';
+            document.getElementById('downPayment').readOnly = false;
+
+            // گەڕانەوە بۆ دۆخی بنەڕەت (فرۆشتنی نەقد)
+            document.getElementById('totalPriceInput').readOnly = false;
+            document.getElementById('saleType').value = 'cash';
+            document.getElementById('saleType').dispatchEvent(new Event('change'));
+        }
+
+        // دامەزراندنی بەرواری ئەمڕۆ
+        document.getElementById('saleDate').valueAsDate = new Date();
+        document.getElementById('purchaseDate').valueAsDate = new Date();
+
+        // Load data from Local Storage on startup and update the UI
+        loadData();
+        updateInventoryTable();
+        updateSaleProductSelect();
+        updateSalesTable();
+
+        // پیشاندانی خانەی مانگەکان تەنها بۆ قیست
+        document.getElementById('saleType').addEventListener('change', function() {
+            const installmentFields = document.getElementById('installmentFields');
+            if (this.value === 'installment') {
+                installmentFields.style.display = 'block';
+            } else {
+                installmentFields.style.display = 'none';
+            }
+        });
+
+function editSale(saleId) {
+    const sale = sales.find(s => s.id === saleId);
+    if (!sale) return;
+
+    // پڕکردنەوەی فۆڕمەکە بە زانیارییە کۆنەکان
+    document.getElementById('saleDate').value = sale.date;
+    document.getElementById('customerName').value = sale.customerName;
+    document.getElementById('customerLocation').value = sale.customerLocation;
+    document.getElementById('customerPhone').value = sale.customerPhone;
+    document.getElementById('saleType').value = sale.saleType;
+    // Trigger change to show/hide fields correctly
+    document.getElementById('saleType').dispatchEvent(new Event('change'));
+
+    // پڕکردنەوەی کۆی نرخ دوای دیاریکردنی جۆرەکەی
+    document.getElementById('totalPriceInput').value = sale.totalPrice || '';
+
+    // پڕکردنەوەی زانیارییەکانی قیست ئەگەر هەبوو
+    if (sale.saleType === 'installment') {
+        document.getElementById('customerGuarantor').value = sale.customerGuarantor || '';
+        document.getElementById('dayAmpere').value = sale.dayAmpere || '';
+        document.getElementById('nightAmpere').value = sale.nightAmpere || '';
+        document.getElementById('downPayment').value = sale.downPayment || '';
+        document.getElementById('downPayment').readOnly = true;
+        calculateRemaining();
+    }
+    // زیادکردنی بەرهەمەکان
+    document.getElementById('saleProductsContainer').innerHTML = '';
+    sale.products.forEach(product => {
+        const row = document.createElement('div');
+        row.className = 'form-group sale-product-row';
+        row.innerHTML = `
+            <select class="form-control saleProductSelect">
+                <option value="${product.productId}">${product.productName}</option>
+            </select>
+            <input type="number" class="form-control saleQuantity" value="${product.quantity}" min="1">
+            <button type="button" class="btn btn-danger" onclick="removeSaleProductRow(this)">لابردن</button>
+        `;
+        document.getElementById('saleProductsContainer').appendChild(row);
+    });
+
+    // گۆڕینی تەنها دوگمەی فرۆشتن بۆ نوێکردنەوە
+    const saleButton = document.querySelector('#saleForm .btn-success');
+    if (saleButton) {
+        saleButton.innerHTML = 'نوێکردنەوەی فرۆشتن';
+        saleButton.onclick = function() { updateSale(saleId); };
+    }
+
+    // سکرۆڵ کردن بۆ فۆڕمی فرۆشتن
+    document.getElementById('sales').scrollIntoView({ behavior: 'smooth' });
+}
+
+function updateSale(saleId) {
+    const sale = sales.find(s => s.id === saleId);
+    if (!sale) return;
+
+    // کۆکردنەوەی زانیارییە نوێیەکان
+    const updatedSale = {
+        ...sale,
+        date: document.getElementById('saleDate').value,
+        customerName: document.getElementById('customerName').value,
+        customerLocation: document.getElementById('customerLocation').value,
+        customerPhone: document.getElementById('customerPhone').value,
+        saleType: document.getElementById('saleType').value,
+    };
+
+    // نوێکردنەوەی بەرهەمەکان
+    const productRows = document.querySelectorAll('.sale-product-row');
+    updatedSale.products = Array.from(productRows).map(row => {
+        const productId = parseInt(row.querySelector('.saleProductSelect').value);
+        const quantity = parseInt(row.querySelector('.saleQuantity').value);
+        const product = products.find(p => p.id === productId);
+
+        return {
+            productId,
+            productName: product ? product.name : 'Unknown',
+            quantity,
+            unitPrice: product ? product.price : 0,
+            totalPrice: product ? (quantity * product.price) : 0
+        };
+    });
+
+    // نوێکردنەوەی زانیارییەکانی قیست و کۆی نرخ
+    const manualTotalPrice = parseFloat(document.getElementById('totalPriceInput').value);
+    if (isNaN(manualTotalPrice) || manualTotalPrice < 0) {
+         alert('تکایە کۆی نرخ بە دروستی پڕ بکەرەوە!');
+         return;
+    }
+    updatedSale.totalPrice = manualTotalPrice;
+
+    if (updatedSale.saleType === 'installment') {
+        updatedSale.customerGuarantor = document.getElementById('customerGuarantor').value;
+        updatedSale.dayAmpere = document.getElementById('dayAmpere').value;
+        updatedSale.nightAmpere = document.getElementById('nightAmpere').value;
+
+        updatedSale.remainingAmount = updatedSale.totalPrice - updatedSale.downPayment;
+        
+        // پاککردنەوەی زانیارییەکان کە چیتر بەکارناهێنرێن
+        delete updatedSale.installmentMonths;
+        delete updatedSale.monthlyAmount;
+    } else {
+        // If type is not installment, remove installment-specific fields
+        delete updatedSale.customerGuarantor;
+        delete updatedSale.dayAmpere;
+        delete updatedSale.nightAmpere;
+        delete updatedSale.downPayment;
+        delete updatedSale.installmentMonths;
+        delete updatedSale.remainingAmount;
+        delete updatedSale.monthlyAmount;
+    }
+
+    // نوێکردنەوەی لیستی فرۆشتنەکان
+    sales = sales.map(s => s.id === saleId ? updatedSale : s);
+
+    // نوێکردنەوەی خشتەکان
+    updateSalesTable();
+    updateInventoryTable();
+
+    // گەڕانەوە بۆ دۆخی ئاسایی
+    clearSaleForm();
+    const saleButton = document.querySelector('button[onclick="updateSale(' + saleId + ')"]');
+    saleButton.innerHTML = 'تۆمارکردنی فرۆشتن';
+    saleButton.onclick = makeSale;
+
+    saveData();
+    alert('فرۆشتن بە سەرکەوتوویی نوێکرایەوە!');
+}
+
+// زیادکردنی ئەم فەنکشنانە بۆ حیسابکردنی قیست
+function calculateRemaining() {
+    const total = parseFloat(document.getElementById('totalPriceInput').value) || 0;
+    const down = parseFloat(document.getElementById('downPayment').value) || 0;
+
+    const remaining = total - down;
+    document.getElementById('remainingAmount').value = remaining > 0 ? remaining : 0;
+}
+
+function calculateTotalPriceFromProducts() {
+    const productRows = document.querySelectorAll('.sale-product-row');
+    let total = 0;
+    productRows.forEach(row => {
+        const productId = parseInt(row.querySelector('.saleProductSelect').value);
+        const quantity = parseInt(row.querySelector('.saleQuantity').value);
+        const product = products.find(p => p.id === productId);
+        if (productId && quantity && product) {
+            total += product.price * quantity;
+        }
+    });
+    
+    // نرخی کۆی گشتی چیتر بە شێوەی خودکار نوێ ناکرێتەوە چونکە بە دەستی داخڵ دەکرێت
+}
+
+// زیادکردنی event listener بۆ گۆڕانکاری لە فۆڕمی فرۆشتن
+
+document.getElementById('totalPriceInput').addEventListener('input', calculateRemaining);
+document.getElementById('downPayment').addEventListener('input', calculateRemaining);
+
+        // زیادکردنی گەڕان بۆ لیستی فرۆشتنەکان
+        document.getElementById('salesSearchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredSales = sales.filter(sale => 
+                sale.customerName.toLowerCase().includes(searchTerm) ||
+                sale.customerPhone.includes(searchTerm)
+            );
+            updateSalesTable(filteredSales);
+        });
+
+        // داخستنی مۆدال لە کاتی کرتەکردن لە دەرەوەی
+        window.onclick = function(event) {
+            const paymentModal = document.getElementById('paymentModal');
+            const historyModal = document.getElementById('historyModal');
+            if (event.target == paymentModal) {
+                closePaymentModal();
+            }
+            if (event.target == historyModal) {
+                closeHistoryModal();
+            }
+        }
+
+    </script>
+</body>
+</html>
